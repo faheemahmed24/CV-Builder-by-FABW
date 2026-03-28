@@ -76,6 +76,11 @@
     margin: 0;
     size: auto;
   }
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
   body {
     background: white !important;
     margin: 0 !important;
@@ -90,5 +95,6 @@
     max-width: none !important;
     box-shadow: none !important;
     padding: 0 !important;
+    border: none !important;
   }
 }

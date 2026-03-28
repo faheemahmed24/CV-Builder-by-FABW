@@ -186,8 +186,8 @@ export const CVBuilder: React.FC<CVBuilderProps> = ({ initialData, onBack }) => 
           </Button>
           <div className="h-6 w-px bg-gray-200 mx-2 dark:bg-gray-700" />
           <Button variant="outline" size="sm" className="hidden sm:flex gap-2" onClick={handlePrint}>
-            <Printer className="h-4 w-4" />
-            Print PDF
+            <Download className="h-4 w-4" />
+            Download PDF
           </Button>
           <Button variant="primary" size="sm" className="hidden sm:flex gap-2" onClick={() => setIsSettingsOpen(true)}>
             <Settings className="h-4 w-4" />
@@ -216,8 +216,8 @@ export const CVBuilder: React.FC<CVBuilderProps> = ({ initialData, onBack }) => 
           
           {/* Floating Controls */}
           <div className="absolute bottom-6 right-6 flex flex-col gap-2">
-            <Button variant="primary" size="icon" className="h-12 w-12 rounded-full shadow-xl" onClick={handlePrint}>
-              <Printer className="h-6 w-6" />
+            <Button variant="primary" size="icon" className="h-12 w-12 rounded-full shadow-xl" onClick={handlePrint} title="Download PDF">
+              <Download className="h-6 w-6" />
             </Button>
           </div>
         </div>
