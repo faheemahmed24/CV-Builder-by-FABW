@@ -1,6 +1,6 @@
 import { SKILLS_DATABASE } from './skillsDatabase';
 import { CITY_DATABASE } from './cityDatabase';
-import { LanguageCode, detectLanguage } from './textUtils';
+import { LanguageCode, detectLanguage, escapeRegExp } from './textUtils';
 
 export interface ParsedData {
   personalInfo: {
@@ -94,7 +94,7 @@ export const parseParagraph = (text: string): ParsedData => {
 
   // Skills extraction
   const skills = SKILLS_DATABASE.filter(skill => 
-    new RegExp(`\\b${skill}\\b`, 'i').test(text)
+    new RegExp(`\\b${escapeRegExp(skill)}\\b`, 'i').test(text)
   );
 
   // Experience extraction (Basic pattern matching)
@@ -140,7 +140,7 @@ export const parseParagraph = (text: string): ParsedData => {
   // Languages extraction
   const languagesList = ["English", "Urdu", "Arabic", "Hindi", "French", "Spanish", "German", "Turkish", "Chinese", "Persian"];
   const languages = languagesList.filter(lang => 
-    new RegExp(`\\b${lang}\\b`, 'i').test(text)
+    new RegExp(`\\b${escapeRegExp(lang)}\\b`, 'i').test(text)
   );
   
   // Auto-add input language if not detected

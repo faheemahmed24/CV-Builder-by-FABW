@@ -7,18 +7,23 @@ import { parseParagraph } from '../lib/parser';
 import { generateCVText } from '../lib/cvGenerator';
 import { loadFromUrl, loadFromStorage } from '../lib/storage';
 import { LanguageCode } from '../lib/translations';
+import { Modal } from '../components/ui/Modal';
+import { Button } from '../components/ui/Button';
 
 export default function Home() {
-  const [cvData, setCvData] = useState<any | null>(() => {
-    if (typeof window !== 'undefined') {
-      return loadFromUrl() || loadFromStorage();
-    }
-    return null;
-  });
+  const [cvData, setCvData] = useState<any | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
   const [isBuilding, setIsBuilding] = useState(false);
+  const [isBackModalOpen, setIsBackModalOpen] = useState(false);
 
   useEffect(() => {
-    // No longer needed here as it's in the initializer
+    setTimeout(() => {
+      setIsMounted(true);
+      const data = loadFromUrl() || loadFromStorage();
+      if (data) {
+        setCvData(data);
+      }
+    }, 0);
   }, []);
 
   const handleBuild = (text: string, targetLang: LanguageCode, template: string, theme: string) => {
@@ -34,10 +39,17 @@ export default function Home() {
   };
 
   const handleBack = () => {
-    if (confirm("Are you sure? You will go back to the input screen.")) {
-      setCvData(null);
-    }
+    setIsBackModalOpen(true);
   };
+
+  const confirmBack = () => {
+    setCvData(null);
+    setIsBackModalOpen(false);
+  };
+
+  if (!isMounted) {
+    return null;
+  }
 
   if (isBuilding) {
     return (
@@ -54,9 +66,29 @@ export default function Home() {
     );
   }
 
-  if (!cvData) {
-    return <InputScreen onBuild={handleBuild} />;
-  }
+  return (
+    <>
+      {!cvData ? (
+        <InputScreen onBuild={handleBuild} />
+      ) : (
+        <CVBuilder initialData={cvData} onBack={handleBack} />
+      )}
 
-  return <CVBuilder initialData={cvData} onBack={handleBack} />;
+      <Modal
+        isOpen={isBackModalOpen}
+        onClose={() => setIsBackModalOpen(false)}
+        title="Go Back?"
+        footer={
+          <>
+            <Button variant="ghost" onClick={() => setIsBackModalOpen(false)}>Cancel</Button>
+            <Button variant="danger" onClick={confirmBack}>Yes, Go Back</Button>
+          </>
+        }
+      >
+        <p className="text-sm text-gray-600">
+          Are you sure you want to go back to the input screen? Your current CV data will be cleared from the editor.
+        </p>
+      </Modal>
+    </>
+  );
 }

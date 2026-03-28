@@ -38,3 +38,7 @@ export const decodeData = (hash: string): any => {
     return null;
   }
 };
+
+export const escapeRegExp = (string: string): string => {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};

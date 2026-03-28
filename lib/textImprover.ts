@@ -1,3 +1,5 @@
+import { escapeRegExp } from './textUtils';
+
 const WEAK_VERBS_MAP: Record<string, string> = {
   'did': 'executed',
   'made': 'developed',
@@ -22,7 +24,7 @@ export const improveText = (text: string): string => {
 
   // Replace weak verbs (case insensitive)
   Object.entries(WEAK_VERBS_MAP).forEach(([weak, strong]) => {
-    const regex = new RegExp(`\\b${weak}\\b`, 'gi');
+    const regex = new RegExp(`\\b${escapeRegExp(weak)}\\b`, 'gi');
     improved = improved.replace(regex, (match) => {
       // Preserve capitalization
       if (match[0] === match[0].toUpperCase()) {
@@ -34,7 +36,7 @@ export const improveText = (text: string): string => {
 
   // Remove filler words
   FILLER_WORDS.forEach((word) => {
-    const regex = new RegExp(`\\b${word}\\b`, 'gi');
+    const regex = new RegExp(`\\b${escapeRegExp(word)}\\b`, 'gi');
     improved = improved.replace(regex, '');
   });
 
@@ -74,14 +76,14 @@ export const getImprovementSuggestions = (text: string): string[] => {
   }
 
   const foundWeakVerbs = Object.keys(WEAK_VERBS_MAP).filter(v => 
-    new RegExp(`\\b${v}\\b`, 'gi').test(text)
+    new RegExp(`\\b${escapeRegExp(v)}\\b`, 'gi').test(text)
   );
   if (foundWeakVerbs.length > 0) {
     suggestions.push(`Consider replacing weak verbs like "${foundWeakVerbs.join(', ')}" with stronger action verbs.`);
   }
 
   const foundFillers = FILLER_WORDS.filter(w => 
-    new RegExp(`\\b${w}\\b`, 'gi').test(text)
+    new RegExp(`\\b${escapeRegExp(w)}\\b`, 'gi').test(text)
   );
   if (foundFillers.length > 0) {
     suggestions.push(`Remove filler words like "${foundFillers.join(', ')}" for more concise writing.`);

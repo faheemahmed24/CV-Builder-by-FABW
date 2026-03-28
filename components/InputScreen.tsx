@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Sparkles, Languages, Layout, Palette, ArrowRight, Lightbulb } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Textarea } from './ui/Textarea';
+import { Toast, ToastType } from './ui/Toast';
 import { LanguageCode } from '../lib/translations';
 import { detectLanguage } from '../lib/textUtils';
 
@@ -31,6 +32,11 @@ export const InputScreen: React.FC<InputScreenProps> = ({ onBuild }) => {
   const [template, setTemplate] = useState('classic');
   const [theme, setTheme] = useState('blue');
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const [toast, setToast] = useState<{ message: string; type: ToastType; isVisible: boolean }>({
+    message: '',
+    type: 'info',
+    isVisible: false
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -46,9 +52,13 @@ export const InputScreen: React.FC<InputScreenProps> = ({ onBuild }) => {
     return 'en';
   }, [text]);
 
+  const showToast = (message: string, type: ToastType = 'info') => {
+    setToast({ message, type, isVisible: true });
+  };
+
   const handleBuild = () => {
     if (text.trim().length < 20) {
-      alert("Please provide a bit more information about yourself.");
+      showToast("Please provide a bit more information about yourself.", "error");
       return;
     }
     onBuild(text, outputLang, template, theme);
@@ -56,6 +66,12 @@ export const InputScreen: React.FC<InputScreenProps> = ({ onBuild }) => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6">
+      <Toast 
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
+      />
       <div className="w-full max-w-4xl space-y-8">
         <div className="text-center space-y-2">
           <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-xl shadow-blue-200 mb-4">

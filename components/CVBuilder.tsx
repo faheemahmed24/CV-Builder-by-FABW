@@ -30,6 +30,7 @@ import { Editor } from './Editor';
 import { Preview } from './Preview';
 import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
+import { Toast, ToastType } from './ui/Toast';
 import { 
   saveToStorage, 
   loadFromStorage, 
@@ -70,11 +71,20 @@ export const CVBuilder: React.FC<CVBuilderProps> = ({ initialData, onBack }) => 
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [atsResult, setAtsResult] = useState(calculateATSScore(initialData));
+  const [toast, setToast] = useState<{ message: string; type: ToastType; isVisible: boolean }>({
+    message: '',
+    type: 'info',
+    isVisible: false
+  });
 
   const previewRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const data = history.present;
+
+  const showToast = (message: string, type: ToastType = 'info') => {
+    setToast({ message, type, isVisible: true });
+  };
 
   // Auto-save debounced
   useEffect(() => {
@@ -99,6 +109,7 @@ export const CVBuilder: React.FC<CVBuilderProps> = ({ initialData, onBack }) => 
 
   const handleExportJson = () => {
     exportToJson(data, `${data.personalInfo?.name || 'cv'}-data.json`);
+    showToast('CV data exported successfully!', 'success');
   };
 
   const handleImportJson = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,8 +119,9 @@ export const CVBuilder: React.FC<CVBuilderProps> = ({ initialData, onBack }) => 
         const importedData = await importFromJson(file);
         handleDataChange(importedData);
         setIsImportModalOpen(false);
+        showToast('CV data imported successfully!', 'success');
       } catch (error) {
-        alert('Error importing file: ' + (error as Error).message);
+        showToast('Error importing file: ' + (error as Error).message, 'error');
       }
     }
   };
@@ -117,23 +129,30 @@ export const CVBuilder: React.FC<CVBuilderProps> = ({ initialData, onBack }) => 
   const handleCopyText = async () => {
     const text = generatePlainText(data);
     await copyToClipboard(text);
-    alert('Plain text copied to clipboard!');
+    showToast('Plain text copied to clipboard!', 'success');
   };
 
   const handleShare = async () => {
     const url = getShareUrl(data);
     await copyToClipboard(url);
-    alert('Shareable URL copied to clipboard!');
+    showToast('Shareable URL copied to clipboard!', 'success');
   };
 
   const handleReset = () => {
     setHistory(createHistory(initialData));
     clearStorage();
     setIsResetModalOpen(false);
+    showToast('All data has been reset.', 'info');
   };
 
   return (
     <div className={`flex h-screen flex-col ${isDarkMode ? 'dark bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
+      <Toast 
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
+      />
       {/* Header */}
       <header className="flex items-center justify-between border-b border-gray-200 bg-white px-6 py-3 dark:bg-gray-800 dark:border-gray-700">
         <div className="flex items-center gap-4">
