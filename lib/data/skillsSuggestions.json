@@ -1,0 +1,16 @@
+{
+  "software engineer": ["JavaScript", "React", "TypeScript", "Node.js", "Git", "REST APIs", "SQL", "Docker", "AWS", "Unit Testing"],
+  "frontend developer": ["HTML5", "CSS3", "JavaScript", "React", "Vue.js", "Tailwind CSS", "Responsive Design", "Web Performance"],
+  "backend developer": ["Node.js", "Python", "Java", "SQL", "NoSQL", "Express.js", "API Design", "Microservices", "Redis"],
+  "full stack developer": ["JavaScript", "React", "Node.js", "SQL", "Git", "TypeScript", "Express.js", "MongoDB", "Redux"],
+  "product manager": ["Product Strategy", "User Research", "Agile Methodology", "Roadmapping", "Stakeholder Management", "Jira", "Analytics"],
+  "data scientist": ["Python", "SQL", "Machine Learning", "Data Visualization", "Pandas", "NumPy", "Scikit-Learn", "TensorFlow", "Statistics"],
+  "ui/ux designer": ["Figma", "User Research", "Prototyping", "Wireframing", "Design Systems", "Adobe XD", "Visual Design"],
+  "marketing manager": ["SEO", "Content Strategy", "Google Analytics", "Social Media Marketing", "Email Marketing", "PPC", "Brand Management"],
+  "sales representative": ["CRM", "Lead Generation", "Negotiation", "Public Speaking", "Customer Relationship Management", "Salesforce"],
+  "project manager": ["Project Planning", "Risk Management", "Budgeting", "Agile", "Scrum", "Team Leadership", "Communication"],
+  "graphic designer": ["Adobe Photoshop", "Adobe Illustrator", "InDesign", "Typography", "Branding", "Layout Design", "Digital Illustration"],
+  "content writer": ["SEO Writing", "Copywriting", "Editing", "Proofreading", "Creative Writing", "Content Strategy", "Research"],
+  "human resources": ["Recruitment", "Employee Relations", "Onboarding", "HRIS", "Performance Management", "Conflict Resolution"],
+  "customer support": ["Problem Solving", "Communication", "CRM", "Technical Support", "Empathy", "Ticketing Systems", "Patience"]
+}

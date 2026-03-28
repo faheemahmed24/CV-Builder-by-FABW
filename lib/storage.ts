@@ -1,4 +1,4 @@
-import { encodeData, decodeData } from './textUtils';
+import { encodeCV, decodeCV } from './utils/sharing';
 
 const STORAGE_KEY = 'cv_builder_data';
 
@@ -24,17 +24,20 @@ export const clearStorage = () => {
 
 export const getShareUrl = (data: any): string => {
   if (typeof window !== 'undefined') {
-    const hash = encodeData(data);
-    return `${window.location.origin}${window.location.pathname}#${hash}`;
+    const encoded = encodeCV(data);
+    const url = new URL(window.location.href);
+    url.searchParams.set('cv', encoded);
+    return url.toString();
   }
   return '';
 };
 
 export const loadFromUrl = (): any | null => {
   if (typeof window !== 'undefined') {
-    const hash = window.location.hash.slice(1);
-    if (hash) {
-      return decodeData(hash);
+    const params = new URLSearchParams(window.location.search);
+    const encoded = params.get('cv');
+    if (encoded) {
+      return decodeCV(encoded);
     }
   }
   return null;

@@ -1,59 +1,92 @@
-# Offline CV Builder
+# 🚀 CV Builder by FABW
 
-A professional, standalone CV builder that works completely in your browser. No APIs, no backend, no database, no auth, and no external services.
+**Create professional, high-impact CVs completely offline. No signups, no tracking, no data collection.**
 
-## Features
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-97.6%25-blue.svg)](https://www.typescriptlang.org/)
+[![Status](https://img.shields.io/badge/Status-Active%20Development-green.svg)](https://github.com/faheemahmed24/CV-Builder-by-FABW)
 
-- **Fully Offline**: Works without internet after the first load.
-- **Privacy First**: All your data is saved in your browser's `localStorage`. No data ever leaves your device.
-- **Built-in Smart Logic**:
-  - **Text Improver**: Enhances your bullet points with action verbs and better phrasing.
-  - **Skills Suggester**: Recommends relevant skills based on your job title.
-  - **ATS Scorer**: Analyzes your CV and gives a score with improvement suggestions.
-- **Templates & Themes**: 3 professional templates (Classic, Modern, Minimal) and 4 color themes.
-- **Export Options**:
-  - **Print to PDF**: High-quality PDF export using your browser's print feature.
-  - **JSON Export/Import**: Save your progress as a file and restore it later.
-  - **Plain Text**: Copy a clean, text-only version for quick applications.
-- **Undo/Redo**: 20 steps of history to safely experiment with your content.
-- **Auto-save**: Never lose your work with automatic local saving.
+CV Builder is a privacy-first, standalone web application that empowers you to build professional resumes without ever sending your data to a server. Everything happens in your browser's `localStorage`.
 
-## How to Run Locally
+---
 
-1. Clone or download this repository.
-2. Install dependencies:
+## 🌟 Why CV Builder?
+
+| Feature | CV Builder | Canva / Google Docs |
+|---------|------------|---------------------|
+| **Cost** | 100% Free Forever | Often Paid / Freemium |
+| **Privacy** | Local-only (No Data Collection) | Cloud-stored (Data Collected) |
+| **Offline** | Works 100% Offline | Requires Internet |
+| **Signup** | No Account Needed | Account Required |
+| **ATS Optimization** | Built-in Scorer & Suggester | Manual / Third-party |
+
+---
+
+## 📸 Screenshots
+
+*Coming Soon!*
+- [ ] Main Editor View
+- [ ] Template Selection
+- [ ] Export Options Dialog
+- [ ] Mobile Preview
+
+---
+
+## 🚀 Quick Start
+
+Get your professional CV ready in under 5 minutes:
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/faheemahmed24/CV-Builder-by-FABW.git
+   ```
+2. **Install dependencies:**
    ```bash
    npm install
    ```
-3. Run the development server:
+3. **Run the development server:**
    ```bash
    npm run dev
    ```
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+4. Open [http://localhost:3000](http://localhost:3000) and start building!
 
-## How to Build Static
+---
 
-To generate a fully standalone version that can be opened as a file:
+## 🛠 Tech Stack
 
-1. Run the build command:
-   ```bash
-   npm run build
-   ```
-2. The static files will be generated in the `/out` folder.
-3. You can now open `/out/index.html` directly in any browser, or host it on any static hosting service.
+- **Framework**: [Next.js 15+](https://nextjs.org/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Persistence**: Browser `localStorage`
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Icons**: [Lucide React](https://lucide.dev/)
 
-## Deployment
+---
 
-### GitHub Pages (3 Steps)
+## 🗺 Roadmap
 
-1. Push your code to a GitHub repository.
-2. Go to **Settings > Pages**.
-3. Under **Build and deployment**, set **Source** to **GitHub Actions** and use the "Next.js" template.
+Check our [GitHub Projects Board](https://github.com/faheemahmed24/CV-Builder-by-FABW/projects) for upcoming features:
+- [ ] LaTeX Export Support
+- [ ] Resume Plagiarism Checker
+- [ ] More Professional Templates
+- [ ] AI-powered Content Generation (Optional/Local)
 
-### Vercel / Netlify
+---
 
-Simply connect your repository and set the build command to `npm run build` and the output directory to `out`.
+## 🤝 Contributing
 
-## License
+We love contributions! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
 
-Free forever. Unlimited users. No strings attached.
+---
+
+## 📖 Documentation
+
+- [Architecture Guide](ARCHITECTURE.md) - How it works under the hood.
+- [User Guide](USAGE.md) - How to get the most out of CV Builder.
+- [Changelog](CHANGELOG.md) - Track our progress.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. Free forever, for everyone.

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { InputScreen } from '../components/InputScreen';
 import { CVBuilder } from '../components/CVBuilder';
-import { parseParagraph } from '../lib/parser';
+import { parseCV } from '../lib/parsers/cvParser';
 import { generateCVText } from '../lib/cvGenerator';
 import { loadFromUrl, loadFromStorage } from '../lib/storage';
 import { LanguageCode } from '../lib/translations';
@@ -31,8 +31,8 @@ export default function Home() {
     
     // Simulate a small delay for "building" effect
     setTimeout(() => {
-      const parsed = parseParagraph(text);
-      const generated = generateCVText(parsed, targetLang);
+      const parsed = parseCV(text);
+      const generated = generateCVText(parsed as any, targetLang);
       setCvData(generated);
       setIsBuilding(false);
     }, 1500);

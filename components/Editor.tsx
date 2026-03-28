@@ -24,25 +24,28 @@ import { Certifications } from './sections/Certifications';
 import { Languages as LanguagesSection } from './sections/Languages';
 import { CustomSection } from './sections/CustomSection';
 import { Button } from './ui/Button';
+import { useLocale } from '../hooks/useLocale';
 
 interface EditorProps {
   data: any;
   onChange: (newData: any) => void;
+  lang: string;
 }
 
-const SECTIONS = [
-  { id: 'personal', label: 'Personal Info', icon: User },
-  { id: 'experience', label: 'Experience', icon: Briefcase },
-  { id: 'education', label: 'Education', icon: GraduationCap },
-  { id: 'skills', label: 'Skills', icon: Wrench },
-  { id: 'projects', label: 'Projects', icon: FolderGit2 },
-  { id: 'certifications', label: 'Certifications', icon: Award },
-  { id: 'languages', label: 'Languages', icon: Languages },
-  { id: 'custom', label: 'Custom Section', icon: Plus },
-];
-
-export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
+export const Editor: React.FC<EditorProps> = ({ data, onChange, lang }) => {
   const [activeSection, setActiveSection] = useState('personal');
+  const t = useLocale(lang);
+
+  const SECTIONS = [
+    { id: 'personal', label: t.form.personalInfo, icon: User },
+    { id: 'experience', label: t.form.experience, icon: Briefcase },
+    { id: 'education', label: t.form.education, icon: GraduationCap },
+    { id: 'skills', label: t.form.skills, icon: Wrench },
+    { id: 'projects', label: t.form.projects, icon: FolderGit2 },
+    { id: 'certifications', label: t.form.certifications, icon: Award },
+    { id: 'languages', label: t.form.languages, icon: Languages },
+    { id: 'custom', label: 'Custom Section', icon: Plus },
+  ];
 
   const renderSection = () => {
     switch (activeSection) {

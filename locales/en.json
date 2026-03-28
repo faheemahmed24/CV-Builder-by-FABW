@@ -1,0 +1,80 @@
+{
+  "header": {
+    "title": "CV Builder",
+    "subtitle": "Create your professional CV offline"
+  },
+  "nav": {
+    "editor": "Editor",
+    "preview": "Preview",
+    "export": "Export",
+    "settings": "Settings",
+    "back": "Go Back",
+    "undo": "Undo",
+    "redo": "Redo",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode"
+  },
+  "form": {
+    "personalInfo": "Personal Information",
+    "fullName": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "location": "Location",
+    "website": "Website",
+    "linkedin": "LinkedIn",
+    "github": "GitHub",
+    "summary": "Professional Summary",
+    "experience": "Work Experience",
+    "education": "Education",
+    "skills": "Skills",
+    "projects": "Projects",
+    "languages": "Languages",
+    "certifications": "Certifications",
+    "add": "Add",
+    "remove": "Remove",
+    "title": "Job Title",
+    "company": "Company",
+    "duration": "Duration",
+    "description": "Description",
+    "institution": "Institution",
+    "degree": "Degree",
+    "field": "Field of Study",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "projectName": "Project Name",
+    "techStack": "Tech Stack"
+  },
+  "templates": {
+    "classic": "Classic",
+    "modern": "Modern",
+    "minimal": "Minimal"
+  },
+  "themes": {
+    "blue": "Blue",
+    "gray": "Gray",
+    "green": "Green",
+    "purple": "Purple"
+  },
+  "export": {
+    "pdf": "Download PDF",
+    "json": "Export JSON",
+    "text": "Copy Text",
+    "share": "Share Link"
+  },
+  "actions": {
+    "reset": "Reset All Data",
+    "import": "Import JSON",
+    "save": "Auto-saved",
+    "atsScore": "ATS Score"
+  },
+  "modals": {
+    "resetTitle": "Reset All Data?",
+    "resetDescription": "This will permanently delete all your current CV data. This action cannot be undone.",
+    "backTitle": "Go Back?",
+    "backDescription": "Are you sure you want to go back to the home screen? Your progress is saved locally.",
+    "importTitle": "Import CV Data",
+    "importDescription": "Select a previously exported JSON file to restore your CV data.",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  }
+}

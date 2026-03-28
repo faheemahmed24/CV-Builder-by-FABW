@@ -54,6 +54,8 @@ import {
 import { calculateATSScore } from '../lib/atsScorer';
 import { LanguageCode } from '../lib/translations';
 import { isRTL } from '../lib/textUtils';
+import { useLocale, useAvailableLanguages } from '../hooks/useLocale';
+import { useDarkMode } from '../hooks/useDarkMode';
 
 interface CVBuilderProps {
   initialData: any;
@@ -66,7 +68,7 @@ export const CVBuilder: React.FC<CVBuilderProps> = ({ initialData, onBack }) => 
   const [theme, setTheme] = useState<string>('blue');
   const [fontSize, setFontSize] = useState<'small' | 'medium' | 'large'>('medium');
   const [outputLang, setOutputLang] = useState<LanguageCode>('en');
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useDarkMode();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
@@ -76,6 +78,9 @@ export const CVBuilder: React.FC<CVBuilderProps> = ({ initialData, onBack }) => 
     type: 'info',
     isVisible: false
   });
+
+  const t = useLocale(outputLang);
+  const languages = useAvailableLanguages();
 
   const previewRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -138,6 +143,46 @@ export const CVBuilder: React.FC<CVBuilderProps> = ({ initialData, onBack }) => 
     showToast('Shareable URL copied to clipboard!', 'success');
   };
 
+  // Keyboard Shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Undo: Ctrl+Z or Cmd+Z
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        handleUndo();
+      }
+      // Redo: Ctrl+Shift+Z or Cmd+Shift+Z
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && e.shiftKey) {
+        e.preventDefault();
+        handleRedo();
+      }
+      // Export JSON: Ctrl+S or Cmd+S
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        handleExportJson();
+      }
+      // Print: Ctrl+P or Cmd+P
+      if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+        e.preventDefault();
+        handlePrint();
+      }
+      // Reset: Ctrl+Alt+R
+      if ((e.ctrlKey || e.metaKey) && e.altKey && e.key === 'r') {
+        e.preventDefault();
+        setIsResetModalOpen(true);
+      }
+      // Close Modals: Esc
+      if (e.key === 'Escape') {
+        setIsSettingsOpen(false);
+        setIsResetModalOpen(false);
+        setIsImportModalOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [data, history]); // Re-bind when data or history changes to ensure correct state in closures
+
   const handleReset = () => {
     setHistory(createHistory(initialData));
     clearStorage();
@@ -146,7 +191,10 @@ export const CVBuilder: React.FC<CVBuilderProps> = ({ initialData, onBack }) => 
   };
 
   return (
-    <div className={`flex h-screen flex-col ${isDarkMode ? 'dark bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
+    <div 
+      className={`flex h-screen flex-col ${isDarkMode ? 'dark bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}
+      dir={isRTL(outputLang) ? 'rtl' : 'ltr'}
+    >
       <Toast 
         message={toast.message}
         type={toast.type}
@@ -163,12 +211,12 @@ export const CVBuilder: React.FC<CVBuilderProps> = ({ initialData, onBack }) => 
             <FileText className="h-6 w-6" />
           </div>
           <div>
-            <h1 className="text-xl font-black uppercase tracking-tighter text-gray-900 dark:text-white">CV Builder</h1>
+            <h1 className="text-xl font-black uppercase tracking-tighter text-gray-900 dark:text-white">{t.header.title}</h1>
             <div className="flex items-center gap-2">
               <div className="h-1.5 w-24 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-700">
                 <div className="h-full bg-blue-600" style={{ width: `${atsResult.score}%` }} />
               </div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">ATS: {atsResult.score}%</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">{t.actions.atsScore}: {atsResult.score}%</span>
             </div>
           </div>
         </div>
@@ -187,11 +235,11 @@ export const CVBuilder: React.FC<CVBuilderProps> = ({ initialData, onBack }) => 
           <div className="h-6 w-px bg-gray-200 mx-2 dark:bg-gray-700" />
           <Button variant="outline" size="sm" className="hidden sm:flex gap-2" onClick={handlePrint}>
             <Download className="h-4 w-4" />
-            Download PDF
+            {t.export.pdf}
           </Button>
           <Button variant="primary" size="sm" className="hidden sm:flex gap-2" onClick={() => setIsSettingsOpen(true)}>
             <Settings className="h-4 w-4" />
-            Settings
+            {t.nav.settings}
           </Button>
         </div>
       </header>
@@ -200,7 +248,7 @@ export const CVBuilder: React.FC<CVBuilderProps> = ({ initialData, onBack }) => 
       <main className="flex flex-1 overflow-hidden flex-col md:flex-row">
         {/* Editor Panel */}
         <div className="w-full md:w-1/2 lg:w-[45%] h-full border-r border-gray-200 dark:border-gray-700">
-          <Editor data={data} onChange={handleDataChange} />
+          <Editor data={data} onChange={handleDataChange} lang={outputLang} />
         </div>
 
         {/* Preview Panel */}
@@ -227,9 +275,9 @@ export const CVBuilder: React.FC<CVBuilderProps> = ({ initialData, onBack }) => 
       <Modal 
         isOpen={isSettingsOpen} 
         onClose={() => setIsSettingsOpen(false)} 
-        title="App Settings"
+        title={t.nav.settings}
         footer={
-          <Button variant="primary" onClick={() => setIsSettingsOpen(false)}>Done</Button>
+          <Button variant="primary" onClick={() => setIsSettingsOpen(false)}>{t.modals.confirm}</Button>
         }
       >
         <div className="space-y-8">
@@ -237,44 +285,44 @@ export const CVBuilder: React.FC<CVBuilderProps> = ({ initialData, onBack }) => 
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-gray-400">
               <Languages className="h-4 w-4" />
-              Output Language
+              {t.form.languages}
             </div>
-            <select 
-              value={outputLang}
-              onChange={(e) => setOutputLang(e.target.value as LanguageCode)}
-              className="w-full h-10 rounded-lg border-2 border-gray-100 bg-white px-3 text-sm font-bold focus:border-blue-600 focus:outline-none transition-all"
-            >
-              <option value="en">English</option>
-              <option value="ur">Urdu (اردو)</option>
-              <option value="ar">Arabic (العربية)</option>
-              <option value="hi">Hindi (हिंदी)</option>
-              <option value="fr">French (Français)</option>
-              <option value="es">Spanish (Español)</option>
-              <option value="de">German (Deutsch)</option>
-              <option value="tr">Turkish (Türkçe)</option>
-              <option value="zh">Chinese (中文)</option>
-              <option value="fa">Persian (فارسی)</option>
-            </select>
+            <div className="grid grid-cols-2 gap-2">
+              {languages.map((lang) => (
+                <button
+                  key={lang.code}
+                  onClick={() => setOutputLang(lang.code as LanguageCode)}
+                  className={`flex items-center justify-between rounded-lg border-2 px-4 py-2 text-sm font-bold transition-all ${
+                    outputLang === lang.code
+                      ? 'border-blue-600 bg-blue-50 text-blue-600 dark:bg-blue-900/30'
+                      : 'border-gray-100 hover:border-gray-200 dark:border-gray-700'
+                  }`}
+                >
+                  <span>{lang.name}</span>
+                  {outputLang === lang.code && <CheckCircle2 className="h-4 w-4" />}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Template Selection */}
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-gray-400">
               <Layout className="h-4 w-4" />
-              Template
+              {t.nav.preview}
             </div>
             <div className="grid grid-cols-3 gap-2">
-              {(['classic', 'modern', 'minimal'] as const).map((t) => (
+              {(['classic', 'modern', 'minimal'] as const).map((tId) => (
                 <button
-                  key={t}
-                  onClick={() => setTemplate(t)}
-                  className={`rounded-lg border-2 p-3 text-center transition-all ${
-                    template === t 
-                      ? 'border-blue-600 bg-blue-50 text-blue-600' 
-                      : 'border-gray-100 hover:border-gray-200'
+                  key={tId}
+                  onClick={() => setTemplate(tId)}
+                  className={`rounded-lg border-2 px-4 py-2 text-xs font-bold uppercase tracking-widest transition-all ${
+                    template === tId
+                      ? 'border-blue-600 bg-blue-50 text-blue-600 dark:bg-blue-900/30'
+                      : 'border-gray-100 hover:border-gray-200 dark:border-gray-700'
                   }`}
                 >
-                  <span className="text-xs font-bold uppercase tracking-wider">{t}</span>
+                  {t.templates[tId]}
                 </button>
               ))}
             </div>
